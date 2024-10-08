@@ -23,18 +23,23 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import org.example.project.data.PokemonRepositoryImpl
 import org.example.project.database.Note
 import org.example.project.database.NoteDAO
 import org.example.project.database.toNoteViewState
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.example.project.expects.ApiImplementation
 import org.example.project.ui.details.DetailsScreen
 import org.example.project.ui.main.MainContent
 import org.example.project.ui.main.TopBar
 import org.example.project.ui.navigation.DetailsRoute
+import org.example.project.ui.pokemon.PokeListComposable
 import org.example.project.ui.viewmodel.DetailsViewModel
 import org.example.project.ui.viewmodel.NoteyViewModel
-import org.ls.notey.utils.Constants.HOME_ROUTE
-import org.ls.notey.utils.Constants.NOTE_ID
+import org.example.project.ui.viewmodel.PokemonViewModel
+import org.example.project.utils.Constants.HOME_ROUTE
+import org.example.project.utils.Constants.NOTE_ID
+import org.example.project.utils.Constants.POKEMON_ROUTE
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
@@ -85,7 +90,8 @@ fun App(noteDAO: NoteDAO) {
                             onItemClick = {
                                 navController.navigate(DetailsRoute.createNavigationRoute(it))
                             },
-                            onDeleteClick = { viewModel.onDeleteClick(it) }
+                            onDeleteClick = { viewModel.onDeleteClick(it) },
+                            onPokemonClick = { navController.navigate(POKEMON_ROUTE) }
                         )
                     }
 
@@ -103,6 +109,13 @@ fun App(noteDAO: NoteDAO) {
                             detailsViewModel.saveNote(name, description)
                             navController.popBackStack()
                         }
+                    }
+
+                    composable(route = POKEMON_ROUTE) {
+                        val pokemonViewModel = viewModel<PokemonViewModel> {
+                            PokemonViewModel(PokemonRepositoryImpl(ApiImplementation()))
+                        }
+                        PokeListComposable(pokemonViewModel.uiState.value, pokemonViewModel::onEvent)
                     }
                 }
             }

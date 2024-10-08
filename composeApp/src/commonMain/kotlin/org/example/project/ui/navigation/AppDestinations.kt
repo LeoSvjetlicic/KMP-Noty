@@ -1,7 +1,7 @@
 package org.example.project.ui.navigation
 
-import org.ls.notey.utils.Constants.CHAT_WITH_ID
-import org.ls.notey.utils.Constants.NOTE_ROUTE
+import org.example.project.utils.Constants.CHAT_WITH_ID
+import org.example.project.utils.Constants.NOTE_ROUTE
 
 sealed class AppRoute(
     open val route: String,
