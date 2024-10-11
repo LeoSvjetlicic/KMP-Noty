@@ -6,5 +6,6 @@ import org.example.project.database.getNoteDatabase
 
 fun MainViewController() = ComposeUIViewController {
     val dao = remember { getNoteDatabase().getDao() }
+
     App(dao)
 }

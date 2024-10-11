@@ -1,6 +1,8 @@
 package org.example.project.ui.main
 
+import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,7 +24,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,7 +41,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.example.project.database.Note
-import org.ls.notey.utils.SALMON
 import kotlin.math.roundToInt
 
 enum class DragAnchors {
@@ -56,20 +57,19 @@ fun NoteCard(
     onItemClick: (Long) -> Unit
 ) {
     val density = LocalDensity.current
+    val decayAnimationSpec: DecayAnimationSpec<Float> = rememberSplineBasedDecay()
     val state = remember {
         AnchoredDraggableState(
             initialValue = DragAnchors.Start,
-            positionalThreshold = { distance: Float -> distance * 0.5f },
+            anchors = DraggableAnchors {
+                DragAnchors.Start at 0f
+                DragAnchors.End at -100f
+            },
+            positionalThreshold = { totalDistance: Float -> totalDistance * 0.5f },
             velocityThreshold = { with(density) { 100.dp.toPx() } },
-            animationSpec = tween(),
-        ).apply {
-            updateAnchors(
-                DraggableAnchors {
-                    DragAnchors.Start at 0f
-                    DragAnchors.End at -100f
-                }
-            )
-        }
+            snapAnimationSpec = tween(),
+            decayAnimationSpec = decayAnimationSpec
+        )
     }
     Box(
         modifier = modifier
@@ -98,7 +98,7 @@ fun NoteCard(
                 .clip(RoundedCornerShape(20.dp))
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(color = SALMON)
+                    indication = ripple()
                 ) { onItemClick(note.id) }
                 .border(1.dp, LightGray, RoundedCornerShape(20.dp))
                 .background(White)

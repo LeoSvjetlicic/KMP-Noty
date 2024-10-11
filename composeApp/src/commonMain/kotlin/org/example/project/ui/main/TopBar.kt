@@ -12,7 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.material.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -20,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.ls.notey.utils.SALMON
 
 @Composable
 fun TopBar(
@@ -36,7 +35,7 @@ fun TopBar(
                 "Back button",
                 modifier = Modifier.clip(RoundedCornerShape(12.dp)).clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(color = SALMON)
+                    indication = ripple()
                 ) { onBackClick() })
         }
         if (!isDetailsScreen) {
@@ -52,7 +51,7 @@ fun TopBar(
                 "Add button",
                 modifier = Modifier.size(32.dp).clip(RoundedCornerShape(12.dp)).clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(color = SALMON)
+                    indication = ripple()
                 ) {
                     onAddClick()
                 }

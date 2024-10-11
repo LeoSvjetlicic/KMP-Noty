@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
@@ -39,13 +38,13 @@ import org.ls.notey.utils.SALMON
 fun DetailsScreen(
     note: NoteViewState,
     modifier: Modifier = Modifier,
+    isKeyboardVisible: Boolean = false,
     onDoneClick: (String, String) -> Unit
 ) {
     var inputName by remember { mutableStateOf("") }
     var inputDescription by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
-
     LaunchedEffect(note) {
         inputName = note.topic
         inputDescription = note.description
@@ -53,6 +52,7 @@ fun DetailsScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
+            .padding(bottom = if (isKeyboardVisible) 200.dp else 0.dp)
             .padding(vertical = 16.dp)
     ) {
         Column(

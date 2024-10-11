@@ -115,7 +115,10 @@ fun App(noteDAO: NoteDAO) {
                         val pokemonViewModel = viewModel<PokemonViewModel> {
                             PokemonViewModel(PokemonRepositoryImpl(ApiImplementation()))
                         }
-                        PokeListComposable(pokemonViewModel.uiState.value, pokemonViewModel::onEvent)
+                        PokeListComposable(
+                            pokemonViewModel.uiState.value,
+                            pokemonViewModel::onEvent
+                        )
                     }
                 }
             }
